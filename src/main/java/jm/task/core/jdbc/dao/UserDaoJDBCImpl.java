@@ -29,9 +29,11 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) throws SQLException {
         try (Connection connection = Util.getMySQLConnection()) {
-            Statement statement = connection.createStatement();
-            String sql = "INSERT into users(name, lastname, age) VALUES ('" + name + "', '" + lastName + "', " + age + ")";
-            statement.executeUpdate(sql);
+            PreparedStatement statement = connection.prepareStatement("INSERT into users(name, lastname, age) VALUES (?, ?, ?)");
+            statement.setString(1, name);
+            statement.setString(2, lastName);
+            statement.setByte(3, age);
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException("Ошибка в методе saveUser()", e);
         }
