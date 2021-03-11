@@ -1,18 +1,27 @@
 package jm.task.core.jdbc.service;
 
 import jm.task.core.jdbc.dao.UserDao;
-import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
+import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
 import jm.task.core.jdbc.model.User;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    private final UserDao userDaoJDBC = new UserDaoJDBCImpl();
+//    private final UserDao userDao = new UserDaoJDBCImpl();
+    private UserDao userDao = new UserDaoHibernateImpl();
+
+
+    public UserServiceImpl() {
+    }
+
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     public void createUsersTable() {
         try {
-            userDaoJDBC.createUsersTable();
+            userDao.createUsersTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -20,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     public void dropUsersTable() {
         try {
-            userDaoJDBC.dropUsersTable();
+            userDao.dropUsersTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -28,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     public void saveUser(String name, String lastName, byte age) {
         try {
-            userDaoJDBC.saveUser(name, lastName, age);
+            userDao.saveUser(name, lastName, age);
             System.out.printf("User с именем – %s %s добавлен в базу данных\n", name, lastName);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -37,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     public void removeUserById(long id) {
         try {
-            userDaoJDBC.removeUserById(id);
+            userDao.removeUserById(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -45,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getAllUsers() {
         try {
-            return userDaoJDBC.getAllUsers();
+            return userDao.getAllUsers();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
     public void cleanUsersTable() {
         try {
-            userDaoJDBC.cleanUsersTable();
+            userDao.cleanUsersTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
